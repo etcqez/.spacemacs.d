@@ -366,7 +366,7 @@ It should only modify the values of Spacemacs settings."
    ;; If non-nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default t) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup t
 
    ;; If non-nil the frame is undecorated when Emacs starts up. Combine this
    ;; variable with `dotspacemacs-maximized-at-startup' to obtain fullscreen
@@ -584,30 +584,7 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
-  (define-key evil-ex-completion-map (kbd "C-b") 'backward-char)
-  (define-key evil-ex-completion-map (kbd "C-f") 'forward-char)
-
-  (defun save-with-normal (number)       ; Interactive version.
-    (interactive "p")
-    (save-buffer)
-    (evil-normal-state))
-  (define-key global-map (kbd "C-s") 'save-with-normal)
-
-  (define-key spacemacs-buffer-mode-map (kbd "Z Z") 'save-buffers-kill-terminal)
-  (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
-  (setq-default scroll-margin 4)
-  (global-set-key "\C-x\C-b" 'ibuffer)
-
-  (define-key key-translation-map (kbd "<left>") (kbd "C-b"))
-  (define-key key-translation-map (kbd "<right>") (kbd "C-f"))
-  (define-key key-translation-map (kbd "<up>") (kbd "C-p"))
-  (define-key key-translation-map (kbd "<down>") (kbd "C-n"))
-
-  (define-key global-map (kbd "M-o") 'evil-open-below)
-  (define-key evil-normal-state-map (kbd "s") 'evil-avy-goto-char-timer)
-  (define-key evil-motion-state-map (kbd "SPC q q") 'spacemacs/frame-killer)
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;RET;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
   (define-key evil-normal-state-map (kbd "RET") 'er/expand-region)
   (with-eval-after-load "org"
     (define-key evil-normal-state-local-map (kbd "RET") 'er/expand-region)
@@ -619,8 +596,37 @@ before packages are loaded."
             (lambda ()
               (define-key evil-normal-state-local-map (kbd "RET") 'er/expand-region)
               ))
-;;;;;;;;;;;;;;;;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;C-w;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (add-hook 'minibuffer-setup-hook
+            (lambda ()
+              (define-key helm-map (kbd "C-w") 'spacemacs/backward-kill-word-or-region)
+              ))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;C-s;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (defun save-with-normal (number)       ; Interactive version.
+    (interactive "p")
+    (save-buffer)
+    (evil-normal-state))
+  (define-key global-map (kbd "C-s") 'save-with-normal)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;mapping;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (define-key key-translation-map (kbd "<left>") (kbd "C-b"))
+  (define-key key-translation-map (kbd "<right>") (kbd "C-f"))
+  (define-key key-translation-map (kbd "<up>") (kbd "C-p"))
+  (define-key key-translation-map (kbd "<down>") (kbd "C-n"))
+  (define-key key-translation-map (kbd "<esc>") (kbd "C-g"))
+  (define-key evil-ex-completion-map (kbd "C-b") 'backward-char)
+  (define-key evil-ex-completion-map (kbd "C-f") 'forward-char)
+
+  ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;other;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+  (define-key spacemacs-buffer-mode-map (kbd "Z Z") 'save-buffers-kill-terminal)
+  (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
+  (setq-default scroll-margin 4)
+  (global-set-key "\C-x\C-b" 'ibuffer)
+  (define-key global-map (kbd "M-o") 'evil-open-below)
+  (define-key evil-normal-state-map (kbd "s") 'evil-avy-goto-char-timer)
+  (define-key evil-motion-state-map (kbd "SPC q q") 'spacemacs/frame-killer)
   ;;; end
   (add-to-list 'auto-mode-alist '("\\.*rc$" . conf-unix-mode))
   )
