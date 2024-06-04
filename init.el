@@ -584,6 +584,16 @@ configuration.
 Put your configuration code here, except for variables that should be set
 before packages are loaded."
 
+  (define-key evil-ex-completion-map (kbd "C-b") 'backward-char)
+  (define-key evil-ex-completion-map (kbd "C-f") 'forward-char)
+
+  (defun save-with-normal (number)       ; Interactive version.
+    (interactive "p")
+    (save-buffer)
+    (evil-normal-state))
+  (define-key global-map (kbd "C-s") 'save-with-normal)
+
+  (define-key spacemacs-buffer-mode-map (kbd "Z Z") 'save-buffers-kill-terminal)
   (add-hook 'hack-local-variables-hook (lambda () (setq truncate-lines t)))
   (setq-default scroll-margin 4)
   (global-set-key "\C-x\C-b" 'ibuffer)
@@ -594,7 +604,6 @@ before packages are loaded."
   (define-key key-translation-map (kbd "<down>") (kbd "C-n"))
 
   (define-key global-map (kbd "M-o") 'evil-open-below)
-  (define-key global-map (kbd "C-s") 'save-buffer)
   (define-key evil-normal-state-map (kbd "s") 'evil-avy-goto-char-timer)
   (define-key evil-motion-state-map (kbd "SPC q q") 'spacemacs/frame-killer)
 
@@ -613,6 +622,7 @@ before packages are loaded."
 ;;;;;;;;;;;;;;;;;;;;; ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
   ;;; end
+  (add-to-list 'auto-mode-alist '("\\.*rc$" . conf-unix-mode))
   )
 
 
@@ -628,7 +638,7 @@ This function is called at the very end of Spacemacs initialization."
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(org-agenda-files '("/home/f/blog/hugo/content/post/linux/软件包.org")))
+ )
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
